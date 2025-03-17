@@ -37,7 +37,7 @@ def fetch_channels(genre: str) -> List:
     return response.json()["response"]["data"]
 
 def convert_json_format(output_file):
-    genres = ["all", "news", "entertainment", "music", "kids", 
+    genres = ["news", "entertainment", "music", "kids", 
               "spiritual", "movies", "lifestyle", "sports", 
               "educational", "others"]
     
