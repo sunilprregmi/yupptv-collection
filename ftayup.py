@@ -19,9 +19,9 @@ def get_headers() -> Dict:
     return {
         "sec-ch-ua-platform": "Windows",
         "sec-ch-ua": '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
-        "box-id": "6daaea02854e441e",
+        "box-id": "7c03c72952b44aa4",
         "sec-ch-ua-mobile": "?0",
-        "session-id": "YT-583a47b7-b3b5-468e-953d-23991fb85a92",
+        "session-id": "YT-f86ef4ba-57ab-4c06-8552-245abc2c6541",
         "tenant-code": "yuppfast",
         "origin": "https://www.yupptv.com",
         "referer": "https://www.yupptv.com/",
