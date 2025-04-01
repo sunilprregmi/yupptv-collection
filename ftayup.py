@@ -1,9 +1,8 @@
-import requests
 import json
+import requests
 from typing import Dict, List
 
-def format_url(url: str) -> str:
-    """Format URL to use CDN base if not already absolute."""
+def format_url(url):
     if not url:
         return ""
     cdn_base = "https://d229kpbsb5jevy.cloudfront.net/yuppfast/content/"
@@ -12,12 +11,11 @@ def format_url(url: str) -> str:
     path = url.replace(',', '/')
     return cdn_base + path
 
-def format_slug(slug: str) -> str:
-    """Extract first part of slug."""
+def format_slug(slug):
+    # Just return the first part of the slug
     return slug.split('/')[0]
 
 def get_headers() -> Dict:
-    """Return headers for API requests."""
     return {
         "sec-ch-ua-platform": "Windows",
         "sec-ch-ua": '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
@@ -31,21 +29,14 @@ def get_headers() -> Dict:
     }
 
 def fetch_channels(genre: str) -> List:
-    """Fetch channel data for a specific genre from the API."""
     base_url = "https://yuppfast-api.revlet.net/service/api/v1/tvguide/channels"
     params = f"filter=genreCode:{genre};langCode:ENG,HIN,MAR,BEN,TEL,KAN,GUA,PUN,BHO,URD,ASS,TAM,MAL,ORI,NEP"
     url = f"{base_url}?{params}"
     
-    try:
-        response = requests.get(url, headers=get_headers(), timeout=10)
-        response.raise_for_status()
-        return response.json()["response"]["data"]
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching channels for genre {genre}: {e}")
-        return []
+    response = requests.get(url, headers=get_headers())
+    return response.json()["response"]["data"]
 
-def fetch_and_replace_data(output_file: str) -> bool:
-    """Fetch new channel data and replace existing file, even if data is unchanged."""
+def convert_json_format(output_file):
     genres = ["news", "entertainment", "music", "kids", 
               "spiritual", "movies", "lifestyle", "sports", 
               "educational", "others"]
@@ -79,17 +70,9 @@ def fetch_and_replace_data(output_file: str) -> bool:
         
         new_format["feeds"].append(category)
 
-    try:
-        # Always overwrite the file with new data
-        with open(output_file, 'w', encoding="utf-8") as f:
-            json.dump(new_format, f, indent=2)
-        print(f"Successfully replaced {output_file} with new data (even if unchanged)")
-        return True
-    except IOError as e:
-        print(f"Error writing to file {output_file}: {e}")
-        return False
+    with open(output_file, 'w') as f:
+        json.dump(new_format, f, indent=2)
 
 if __name__ == "__main__":
     output_file = 'yupp-fta.json'
-    success = fetch_and_replace_data(output_file)
-    exit(0 if success else 1)
+    convert_json_format(output_file)
