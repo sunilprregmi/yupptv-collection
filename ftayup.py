@@ -44,8 +44,8 @@ def fetch_channels(genre: str) -> List:
         print(f"Error fetching channels for genre {genre}: {e}")
         return []
 
-def fetch_and_save_new_data(output_file: str) -> bool:
-    """Fetch new channel data and replace existing file with new data."""
+def fetch_and_replace_data(output_file: str) -> bool:
+    """Fetch new channel data and replace existing file, even if data is unchanged."""
     genres = ["news", "entertainment", "music", "kids", 
               "spiritual", "movies", "lifestyle", "sports", 
               "educational", "others"]
@@ -80,9 +80,10 @@ def fetch_and_save_new_data(output_file: str) -> bool:
         new_format["feeds"].append(category)
 
     try:
+        # Always overwrite the file with new data
         with open(output_file, 'w', encoding="utf-8") as f:
             json.dump(new_format, f, indent=2)
-        print(f"Successfully replaced old data with new data in {output_file}")
+        print(f"Successfully replaced {output_file} with new data (even if unchanged)")
         return True
     except IOError as e:
         print(f"Error writing to file {output_file}: {e}")
@@ -90,5 +91,5 @@ def fetch_and_save_new_data(output_file: str) -> bool:
 
 if __name__ == "__main__":
     output_file = 'yupp-fta.json'
-    success = fetch_and_save_new_data(output_file)
+    success = fetch_and_replace_data(output_file)
     exit(0 if success else 1)
